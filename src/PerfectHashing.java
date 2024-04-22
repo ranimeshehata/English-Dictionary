@@ -1,8 +1,51 @@
+import java.io.File;
+import java.nio.charset.StandardCharsets;
+import java.util.List;
+import java.util.ArrayList;
+import java.util.Scanner;
+
 public abstract class PerfectHashing {
 
 
     public String[] getKeys(String filepath){
-        return null;
+        List<String> arr = new ArrayList<>();
+        try {
+            filepath = filepath.replaceAll("'", "").replaceAll("\"", "");
+            Scanner scan = new Scanner(new File(filepath));
+            while (scan.hasNextLine())
+                arr.add(scan.nextLine().replaceAll("\n", ""));
+
+            // System.out.println(this.mainList + "\n");
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+        return arr.toArray(new String[0]);
+    }
+
+    protected  int[] convertToASCII(String str){
+        int[] bin= new int[70];
+        byte[] ascii;
+
+        // Converting string to byte array
+        ascii = str.getBytes(StandardCharsets.US_ASCII);
+
+        int f = 0;
+        for (int i = 0; i < ascii.length; i++) {
+            for (int j = 0; j < 7; j++) {
+                bin[f] = ascii[i] % 2;
+                ascii[i] /=2;
+            }
+        }
+
+        return bin;
+    }
+
+    protected int getIndex(int[] bin){
+        int index = 0;
+        for (int i = 0; i <bin.length; i++) {
+         index += (int) (bin[i] * (Math.pow(2,i)));
+        }
+        return index;
     }
 
     protected int[] hashing(int[][] h, int[] x){
@@ -18,6 +61,12 @@ public abstract class PerfectHashing {
 
     // abstract methods
 
+    abstract public void rehash();
+
+    /**
+     * @return 0 if successfully completed and 1 new size is less than current size
+     * */
+    abstract public int rehash(int newSize);
     /**
     * @return 0 if successfully completed and 1 otherwise
     * */
@@ -39,7 +88,6 @@ public abstract class PerfectHashing {
     abstract public int[] batchInsert (String filePath);
 
     /**
-     * @param filePath
      * @return [no. deleted keys,no. non-existing keys]
      * */
     abstract public int[] batchDelete (String filePath);

@@ -1,7 +1,19 @@
 public abstract class PerfectHashing {
 
+
     public String[] getKeys(String filepath){
         return null;
+    }
+
+    protected int[] hashing(int[][] h, int[] x){
+        int[] hx = new int[x.length];
+
+        for(int r = 0; r < h.length; r++){
+            hx[r] = 0;
+            for(int i = 0; i < x.length; i++)
+                    hx[r]+= h[r][i] * x[i];
+        }
+        return  hx;
     }
 
     // abstract methods

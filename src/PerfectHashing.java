@@ -30,14 +30,23 @@ public abstract class PerfectHashing {
         ascii = str.getBytes(StandardCharsets.US_ASCII);
 
         int f = 0;
-        for (int i = 0; i < ascii.length; i++) {
-            for (int j = 0; j < 7; j++) {
-                bin[f] = ascii[i] % 2;
-                ascii[i] /=2;
+        for (byte b : ascii) {
+            int[] binWord = this.toBinary(b);
+            for (int j = 0; j < 7; j++, f++) {
+                bin[f] = binWord[j];
             }
         }
 
         return bin;
+    }
+
+    private int[] toBinary(byte b) {
+        int[] output = new int[7];
+        for (int i = 6; i > -1; i--) {
+            output[i] = b % 2;
+            b /=2;
+        }
+        return output;
     }
 
     protected int getIndex(int[] bin){
@@ -49,12 +58,12 @@ public abstract class PerfectHashing {
     }
 
     protected int[] hashing(int[][] h, int[] x){
-        int[] hx = new int[x.length];
+        int[] hx = new int[h.length];
 
         for(int r = 0; r < h.length; r++){
             hx[r] = 0;
             for(int i = 0; i < x.length; i++)
-                    hx[r]+= h[r][i] * x[i];
+                    hx[r] ^= h[r][i] * x[i];
         }
         return  hx;
     }
@@ -80,7 +89,7 @@ public abstract class PerfectHashing {
     /**
      * @return 0 if exists and 1 if not
      * */
-    abstract public int Search (String key);
+    abstract public int search (String key);
 
     /**
      * @return [no. newly added keys , no. already existing keys]

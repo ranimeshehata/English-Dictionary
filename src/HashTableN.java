@@ -4,7 +4,7 @@ import java.util.Random;
 public class HashTableN extends  PerfectHashing{
     /**
      * bucket
-    
+
      */
     private class bucket {
         Random rand = new Random();
@@ -12,7 +12,7 @@ public class HashTableN extends  PerfectHashing{
         int [][] hash;
         int size;
         int count;
-    
+
         public bucket(int size){
             this.count = 0;
             this.vals = new String[size];
@@ -23,15 +23,15 @@ public class HashTableN extends  PerfectHashing{
             int rows = (int) Math.ceil(Math.log(size*size) / Math.log(2));
             int cols = 70;
             this.hash = new int[rows][cols];
-    
+
             for (int i = 0; i < cols; i++) {
                 for (int j = 0; j < rows; j++) {
                     this.hash[j][i] = (rand.nextInt(1000) % 2 );
                 }
             }
         }
-    
-    
+
+
         int insert(String key){
             int []x=HashTableN.super.convertToASCII(key);
             int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.size;
@@ -46,7 +46,7 @@ public class HashTableN extends  PerfectHashing{
             else{
                 count++;
                 this.vals[index]=key;
-                return 0; 
+                return 0;
             }
         }
         int delete(String key){
@@ -103,17 +103,17 @@ public class HashTableN extends  PerfectHashing{
             return 0;
         }
     }
-    
+
     private bucket[] table;
     private int capacity;
     private int count;
     private int[][] hash;
     Random rand = new Random();
-    
+
     public HashTableN(){
-      this(10);
+        this(10);
         this.setHash();
-    }    
+    }
     public HashTableN(int size){
         this.table=new bucket[size];
         this.capacity=size;
@@ -122,12 +122,12 @@ public class HashTableN extends  PerfectHashing{
             this.table[i]=new bucket(size);
         }
         this.setHash();
-    }    
+    }
     private void setHash() {
         int rows = (int) Math.ceil(Math.log(capacity*capacity) / Math.log(2));
         int cols = 70;
         this.hash = new int[rows][cols];
-    
+
         for (int i = 0; i < cols; i++) {
             for (int j = 0; j < rows; j++) {
                 this.hash[j][i] = (rand.nextInt(1000) % 2 );
@@ -238,22 +238,22 @@ public class HashTableN extends  PerfectHashing{
      */
     @Override
     public int[] batchInsert(String filePath) {
-            String[] keys = super.getKeys(filePath);
-            int[] output = {0,0,0};
-            for(String s:keys){
-                int x=this.insert(s);
-                if(x==1){
-                    this.rehash();
-                    output[0]++;
-                    output[2]++;
-                }
-                else if(x==0){
-                    output[0]++;
-                }
-                else{
-                    output[1]++;
-                }
+        String[] keys = super.getKeys(filePath);
+        int[] output = {0,0,0};
+        for(String s:keys){
+            int x=this.insert(s);
+            if(x==1){
+                this.rehash();
+                output[0]++;
+                output[2]++;
             }
+            else if(x==0){
+                output[0]++;
+            }
+            else{
+                output[1]++;
+            }
+        }
         return output ;
     }
 

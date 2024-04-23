@@ -97,7 +97,7 @@ public abstract class PerfectHashing {
     abstract public int search (String key);
 
     /**
-     * @return [no. newly added keys , no. already existing keys]
+     * @return [no. newly added keys , no. already existing keys, no. rehashing]
      * */
     abstract public int[] batchInsert (String filePath);
 

@@ -3,24 +3,33 @@ import java.util.Random;
 public class HashTableN2 extends PerfectHashing {
 
     private final Random rand = new Random();
+    private boolean rehashing = false;
     private String[] table;
     private int[][] hash;
     private int size ;
 
     public HashTableN2(){
-        size = 10;
+        this.size = 10;
+        this.table = new String[size * size];
+        this.setHash();
+        this.size = 0;
+    }
+
+    public HashTableN2(int size){
+        this.size = size;
         table = new String[size * size];
         this.setHash();
-        size = 0;
+        this.size = 0;
     }
 
     private void setHash() {
         int rows = (int) Math.ceil(Math.log(size*size) / Math.log(2));
         int cols = 70;
         this.hash = new int[rows][cols];
-        for (int i = 0; i < rows; i++) {
-            for (int j = 0; j < cols; j++) {
-                this.hash[i][j] = (rand.nextInt(10)) % 2;
+
+        for (int i = 0; i < cols; i++) {
+            for (int j = 0; j < rows; j++) {
+                this.hash[j][i] = (rand.nextInt(1000) % 2 );
             }
         }
     }
@@ -34,15 +43,18 @@ public class HashTableN2 extends PerfectHashing {
         int[] x = super.convertToASCII(key);
         int[] binIndex = super.hashing(this.hash,x);
 
-        int index = super.getIndex(binIndex);
+        int index = super.getIndex(binIndex) % this.table.length;
 
         if(key.equals(this.table[index])){
-            return 0;
+            return 2;
         }
 
         if(this.table[index] != null){
-            this.rehash();
-            this.insert(key);
+            if(!rehashing){
+                this.rehashing = true;
+                while (this.rehash() == 1);
+                this.insert(key);
+            }
             return  1;
         }
 
@@ -54,27 +66,33 @@ public class HashTableN2 extends PerfectHashing {
 
 
     @Override
-    public void rehash() {
+    public int rehash() {
         String[] t = this.table;
         this.table = new String[size * size];
         this.setHash();
         this.size = 0;
 
         for (String s : t) {
-            if (s != null)
-                this.insert(s);
+            if (s != null) {
+                if(this.insert(s) == 1) {
+                    rehashing = false;
+                    return 1;
+                }
+            }
         }
+
+        return 0;
     }
 
     /**
-     * @return 0 if successfully completed and 1 new size is less than current size
+     * @return 0 if successfully completed and -1 new size is less than current size
      */
     @Override
     public int rehash(int newSize) {
 
         String[] t = this.table;
 
-        if (newSize < (this.size*this.size)) return 1;
+        if (newSize < (this.size*this.size)) return -1;
 
         this.size = newSize;
         this.table = new String[size * size];
@@ -82,8 +100,12 @@ public class HashTableN2 extends PerfectHashing {
         this.size = 0;
 
         for (String s : t) {
-            if (s != null)
-                this.insert(s);
+            if (s != null) {
+                if(this.insert(s) == 1) {
+                    rehashing = false;
+                    return 1;
+                }
+            }
         }
         return 0;
     }
@@ -96,7 +118,7 @@ public class HashTableN2 extends PerfectHashing {
         int[] x = super.convertToASCII(key);
         int[] binIndex = super.hashing(this.hash,x);
 
-        int index = super.getIndex(binIndex);
+        int index = super.getIndex(binIndex) % this.table.length;
 
         if(key.equals(this.table[index])){
             this.table[index] = null;
@@ -110,14 +132,13 @@ public class HashTableN2 extends PerfectHashing {
      * @return 0 if exists and 1 if not
      */
     @Override
-    public int Search(String key) {
+    public int search(String key) {
         int[] x = super.convertToASCII(key);
         int[] binIndex = super.hashing(this.hash,x);
 
-        int index = super.getIndex(binIndex);
+        int index = super.getIndex(binIndex) % this.table.length;
 
         if(key.equals(this.table[index])){
-            this.table[index] = null;
             return 0;
         }
 
@@ -164,4 +185,40 @@ public class HashTableN2 extends PerfectHashing {
 
         return output;
     }
+
+
+
+
+
+// Test
+//    public static void main(String[] args){
+//        String[] str = {"aaa", "bbb", "aba", "case", "aaa", "baa"};
+//
+//        PerfectHashing h1 = new HashTableN2();
+//        PerfectHashing h2 = new HashTableN2(5);
+//
+//        System.out.println("Insertion:");
+//        for(String s: str){
+//            System.out.println(s);
+//            System.out.println(h1.insert(s));
+//            System.out.println(h2.insert(s));
+//        }
+
+//        str = new String[]{"aaa", "bbb", "case", "baa"};
+//
+//        System.out.println("Search:");
+//        for(String s: str){
+//            System.out.println(s);
+//            System.out.println(h1.search(s));
+//            System.out.println(h2.search(s));
+//        }
+//
+//        System.out.println("Deletion:");
+//        for(String s: str){
+//            System.out.println(s);
+//            System.out.println(h1.delete(s));
+//            System.out.println(h2.delete(s));
+//        }
+
+//    }
 }

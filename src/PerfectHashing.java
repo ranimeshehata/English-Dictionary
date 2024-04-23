@@ -70,10 +70,15 @@ public abstract class PerfectHashing {
 
     // abstract methods
 
+    /**
+     * @return 0 if successfully completed and 1 if a rehashing in side the rehashing and have to call function again
+     * */
+
     abstract public int rehash();
 
     /**
-     * @return 0 if successfully completed and 1 new size is less than current size
+     * @return 0 if successfully completed ,-1  if new size is less than current size
+     * and 1 if a rehashing in side the rehashing and have to call function again
      * */
     abstract public int rehash(int newSize);
     /**

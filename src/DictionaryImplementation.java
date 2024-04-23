@@ -2,48 +2,39 @@ import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
 import java.util.HashMap;
+import java.util.Map;
 
 public class DictionaryImplementation {
-    private HashMap<String, Integer> dictionaryN;
-    private HashMap<String, Integer> dictionaryN2;
+    private Map<String, Integer> dictionary;
+
     public DictionaryImplementation(String typeD) {
         if (typeD.equals("O(n)")) {
-            // Implement O(n) dictionary
-            dictionaryN = new HashMap<>();
+            dictionary = new HashMap<>();
+        } else if (typeD.equals("O(n^2)")) {
+            dictionary = new HashMap<>();
         } else {
-            // Implement O(n^2) dictionary
-            dictionaryN2 = new HashMap<>();
+            throw new IllegalArgumentException("Invalid dictionary type.");
         }
     }
 
-    public void insert(String toInsert) {
-        if (dictionaryN != null){
-            dictionaryN.put(toInsert, 1);
-            System.out.print("(" + toInsert + ")" + "\u001B[32m Succefully inserted ✅\n\u001B[0m");
-        } else {
-            dictionaryN2.put(toInsert, 1);
-            System.out.print("(" + toInsert + ")" + "\u001B[32m Succefully inserted ✅\n\u001B[0m");
-        }
+    public synchronized void insert(String toInsert) {
+        dictionary.put(toInsert, 1);
+        System.out.println("(" + toInsert + ")" + "\u001B[32m Successfully inserted ✅\u001B[0m");
     }
 
-    public void delete(String toDelete) {
-        if (dictionaryN != null) {
-            dictionaryN.remove(toDelete);
-            System.out.print("(" + toDelete + ")" + "\u001B[32m Succefully DELETED ✅\n\u001B[0m");
+    public synchronized void delete(String toDelete) {
+        if (dictionary.remove(toDelete) != null) {
+            System.out.println("(" + toDelete + ")" + "\u001B[32m Successfully DELETED ✅\u001B[0m");
         } else {
-            // O(n^2) deletion logic
-            if (dictionaryN2.containsKey(toDelete)) {
-                dictionaryN2.remove(toDelete);
-                System.out.print("(" + toDelete + ")" + "\u001B[32m Succefully DELETED ✅\n\u001B[0m");
-            }
+            System.out.println("(" + toDelete + ")" + "\u001B[31m Not found ❌\u001B[0m");
         }
     }
 
     public void search(String toSearch) {
-        if (dictionaryN != null) {
-            System.out.println(dictionaryN.containsKey(toSearch) ? "Found in O(n) dictionary" : "Not found in O(n) dictionary");
+        if (dictionary.containsKey(toSearch)) {
+            System.out.println("\u001B[32m Found in dictionary ✅\u001B[0m");
         } else {
-            System.out.println(dictionaryN2.containsKey(toSearch) ? "Found in O(n^2) dictionary" : "Not found in O(n^2) dictionary");
+            System.out.println("\u001B[31m Not found in dictionary ❌\u001B[0m");
         }
     }
 
@@ -54,7 +45,7 @@ public class DictionaryImplementation {
                 insert(line.trim());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error reading file: " + e.getMessage());
         }
     }
 
@@ -65,7 +56,8 @@ public class DictionaryImplementation {
                 delete(line.trim());
             }
         } catch (IOException e) {
-            e.printStackTrace();
+            System.err.println("Error reading file: " + e.getMessage());
         }
     }
+
 }

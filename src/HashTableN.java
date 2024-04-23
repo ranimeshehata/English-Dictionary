@@ -1,5 +1,23 @@
 public class HashTableN extends  PerfectHashing{
     /**
+     * @return
+     */
+    @Override
+    public int rehash() {
+
+        return 0;
+    }
+
+    /**
+     * @param newSize
+     * @return 0 if successfully completed and 1 new size is less than current size
+     */
+    @Override
+    public int rehash(int newSize) {
+        return 0;
+    }
+
+    /**
      * @param key
      * @return 0 if successfully completed and 1 otherwise
      */
@@ -22,7 +40,7 @@ public class HashTableN extends  PerfectHashing{
      * @return 0 if exists and 1 if not
      */
     @Override
-    public int Search(String key) {
+    public int search(String key) {
         return 0;
     }
 

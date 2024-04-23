@@ -40,7 +40,7 @@ public abstract class PerfectHashing {
         return bin;
     }
 
-    private int[] toBinary(byte b) {
+    protected int[] toBinary(byte b) {
         int[] output = new int[7];
         for (int i = 6; i > -1; i--) {
             output[i] = b % 2;
@@ -70,7 +70,7 @@ public abstract class PerfectHashing {
 
     // abstract methods
 
-    abstract public void rehash();
+    abstract public int rehash();
 
     /**
      * @return 0 if successfully completed and 1 new size is less than current size

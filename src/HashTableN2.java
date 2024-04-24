@@ -52,9 +52,10 @@ public class HashTableN2 extends PerfectHashing {
 
         if(this.table[index] != null){
             if(!rehashing){
-                do {
-                    this.rehashing = true;
-                }while (this.rehash() == 1);
+//                do {
+//                    this.rehashing = true;
+//                }while (this.rehash() == 1);
+                this.rehash();
                 this.insert(key);
             }
             return  1;
@@ -74,20 +75,24 @@ public class HashTableN2 extends PerfectHashing {
 
         if(this.size < 2) this.size = 2;
 
-        this.table = new String[size * size];
-        this.setHash();
-        this.size = 0;
+        do {
+            rehashing = true;
+            this.table = new String[size * size];
+            this.setHash();
+            this.size = 0;
 
-        for (String s : tempTable) {
-            if (s != null) {
-                if(this.insert(s) == 1) {
-                    rehashing = false;
-                    this.size=tempSize;
-                    this.table = tempTable;
-                    return 1;
+            for (String s : tempTable) {
+                if (s != null) {
+                    if (this.insert(s) == 1) {
+                        rehashing = false;
+                        this.size = tempSize;
+                        this.table = tempTable;
+                        break;
+                    }
                 }
             }
-        }
+
+        }while (!rehashing);
 
         this.rehashing = false;
         return 0;
@@ -104,6 +109,8 @@ public class HashTableN2 extends PerfectHashing {
 
         if (newSize < 2 || newSize < (this.size*this.size)) return -1;
 
+        do {
+            rehashing = true;
         this.size = newSize;
         this.table = new String[size * size];
         this.setHash();
@@ -115,10 +122,11 @@ public class HashTableN2 extends PerfectHashing {
                     rehashing = false;
                     this.size = tempSize;
                     this.table = tempTable;
-                    return 1;
+                    break;
                 }
             }
         }
+        }while (!rehashing);
 
         rehashing = false;
         return 0;
@@ -169,15 +177,13 @@ public class HashTableN2 extends PerfectHashing {
         String[] keys = super.getKeys(filePath);
 
         this.size += keys.length;
-//        int s = this.size;
-        do {
-            this.rehashing = true;
-        }while (this.rehash() == 1);
+
+        this.rehash();
 
         for (String key : keys) {
             int res = this.insert(key);
             if (res == 0) output[0]++;
-            else if (res == 1) output[1]++;
+            else if (res == 2) output[1]++;
             else {
                 output[0]++;
                 output[2]++;
@@ -209,10 +215,26 @@ public class HashTableN2 extends PerfectHashing {
 
 
 // Test
-//    public static void main(String[] args){
+    public static void main(String[] args){
+        PerfectHashing p = new HashTableN2();
+
+        p = new HashTableN2();
+        p = new HashTableN();
+
 //        String[] str = {"aaa", "bbb", "aba", "case", "aaa", "baa","dfdfgd", "fsgeefds", "vdfvsdfv", "rgeged", "fdsdvd"};
-//
-//        HashTableN2 h1 = new HashTableN2();
+
+        HashTableN2 h1 = new HashTableN2(4);
+
+        System.out.println(Arrays.toString(h1.batchDelete("/home/mohamed/Desktop/test1")));
+        System.out.println(Arrays.toString(h1.batchInsert("/home/mohamed/Desktop/test1")));
+        System.out.println(Arrays.toString(h1.table));
+        System.out.println(h1.table.length);
+        System.out.println(h1.size);
+        System.out.println(Arrays.toString(h1.batchDelete("/home/mohamed/Desktop/test1")));
+
+
+
+
 //        HashTableN2 h2 = new HashTableN2(5);
 //
 //        System.out.println("Insertion:");
@@ -221,7 +243,7 @@ public class HashTableN2 extends PerfectHashing {
 //            System.out.println(h1.insert(s));
 //            System.out.println(h2.insert(s));
 //        }
-//
+
 //        System.out.println(Arrays.toString(h1.table));
 //        System.out.println(h1.table.length);
 //        System.out.println(h1.size);
@@ -238,22 +260,22 @@ public class HashTableN2 extends PerfectHashing {
 //        System.out.println(Arrays.toString(h2.table));
 //        System.out.println(h2.table.length);
 //        System.out.println(h2.size);
+
+//        str = new String[]{"aaa", "bbb", "case", "baa"};
 //
-////        str = new String[]{"aaa", "bbb", "case", "baa"};
-////
-////        System.out.println("Search:");
-////        for(String s: str){
-////            System.out.println(s);
-////            System.out.println(h1.search(s));
-////            System.out.println(h2.search(s));
-////        }
-////
-////        System.out.println("Deletion:");
-////        for(String s: str){
-////            System.out.println(s);
-////            System.out.println(h1.delete(s));
-////            System.out.println(h2.delete(s));
-////        }
+//        System.out.println("Search:");
+//        for(String s: str){
+//            System.out.println(s);
+//            System.out.println(h1.search(s));
+//            System.out.println(h2.search(s));
+//        }
 //
-//    }
+//        System.out.println("Deletion:");
+//        for(String s: str){
+//            System.out.println(s);
+//            System.out.println(h1.delete(s));
+//            System.out.println(h2.delete(s));
+//        }
+
+    }
 }

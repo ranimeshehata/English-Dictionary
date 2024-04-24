@@ -118,12 +118,7 @@ public class HashTableN extends  PerfectHashing{
     Random rand = new Random();
 
     public HashTableN(){
-        this.table=new bucket[1000];
-        this.capacity=1000;
-        this.count=0;
-        for(int i=0;i<capacity;i++){
-            this.table[i]=new bucket();
-        }
+      this(10);
         this.setHash();
     }
     public HashTableN(int size){

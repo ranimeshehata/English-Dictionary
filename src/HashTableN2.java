@@ -5,16 +5,19 @@ import java.util.Random;
 public class HashTableN2 extends PerfectHashing {
 
     private final Random rand = new Random();
+    boolean hn=false;
     private boolean rehashing = false;
     private String[] table;
     private int[][] hash;
     private int size ;
+    private int count;
 
     public HashTableN2(){
         this.size = 10;
         this.table = new String[size * size];
         this.setHash();
         this.size = 0;
+        this.count = 0;
     }
 
     public HashTableN2(int size){
@@ -22,6 +25,7 @@ public class HashTableN2 extends PerfectHashing {
         table = new String[size * size];
         this.setHash();
         this.size = 0;
+        this.count = 0;
     }
 
     private void setHash() {
@@ -52,16 +56,22 @@ public class HashTableN2 extends PerfectHashing {
         }
 
         if(this.table[index] != null){
+            count++;
             if(!rehashing){
 //                do {
 //                    this.rehashing = true;
 //                }while (this.rehash() == 1);
+                if(!hn){
                 this.rehash();
+                }
+                else if(hn){
+                    this.rehash(this.count);
+                }
                 this.insert(key);
             }
             return  1;
         }
-
+        count++;
         size++;
         this.table[index] = key;
 

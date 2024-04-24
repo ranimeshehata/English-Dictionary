@@ -1,4 +1,5 @@
 import java.io.File;
+import java.io.FileNotFoundException;
 import java.nio.charset.StandardCharsets;
 import java.util.List;
 import java.util.ArrayList;
@@ -7,18 +8,15 @@ import java.util.Scanner;
 public abstract class PerfectHashing{
 
 
-    public String[] getKeys(String filepath){
+    public String[] getKeys(String filepath) throws FileNotFoundException {
         List<String> arr = new ArrayList<>();
-        try {
-            filepath = filepath.replaceAll("'", "").replaceAll("\"", "");
-            Scanner scan = new Scanner(new File(filepath));
-            while (scan.hasNextLine())
-                arr.add(scan.nextLine().replaceAll("\n", ""));
+        filepath = filepath.replaceAll("'", "").replaceAll("\"", "");
+
+        Scanner scan = new Scanner(new File(filepath));
+        while (scan.hasNextLine())
+            arr.add(scan.nextLine().replaceAll("\n", ""));
 
             // System.out.println(this.mainList + "\n");
-        } catch (Exception e) {
-            System.out.println(e.getMessage());
-        }
         return arr.toArray(new String[0]);
     }
 
@@ -99,10 +97,10 @@ public abstract class PerfectHashing{
     /**
      * @return [no. newly added keys , no. already existing keys, no. rehashing]
      * */
-    abstract public int[] batchInsert (String filePath);
+    abstract public int[] batchInsert (String filePath) throws FileNotFoundException;
 
     /**
      * @return [no. deleted keys,no. non-existing keys]
      * */
-    abstract public int[] batchDelete (String filePath);
+    abstract public int[] batchDelete (String filePath) throws FileNotFoundException;
 }

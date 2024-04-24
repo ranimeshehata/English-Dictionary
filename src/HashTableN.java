@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -237,7 +238,7 @@ public class HashTableN extends  PerfectHashing{
      * @return [no. newly added keys , no. already existing keys, no. rehashing]
      */
     @Override
-    public int[] batchInsert(String filePath) {
+    public int[] batchInsert(String filePath) throws FileNotFoundException {
         String[] keys = super.getKeys(filePath);
         int[] output = {0,0,0};
         for(String s:keys){
@@ -262,7 +263,7 @@ public class HashTableN extends  PerfectHashing{
      * @return [no. deleted keys,no. non-existing keys]
      */
     @Override
-    public int[] batchDelete(String filePath) {
+    public int[] batchDelete(String filePath) throws FileNotFoundException {
         String[] keys = super.getKeys(filePath);
         int[] output = {0,0};
         for(String s:keys){

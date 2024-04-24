@@ -1,3 +1,4 @@
+import java.io.FileNotFoundException;
 import java.util.Arrays;
 import java.util.Random;
 
@@ -171,7 +172,7 @@ public class HashTableN2 extends PerfectHashing {
      * @return [no. newly added keys , no. already existing keys, no. rehashing]
      */
     @Override
-    public int[] batchInsert(String filePath) {
+    public int[] batchInsert(String filePath) throws FileNotFoundException {
         int[] output = {0,0,0};
 
         String[] keys = super.getKeys(filePath);
@@ -197,7 +198,7 @@ public class HashTableN2 extends PerfectHashing {
      * @return [no. deleted keys,no. non-existing keys]
      */
     @Override
-    public int[] batchDelete(String filePath) {
+    public int[] batchDelete(String filePath) throws FileNotFoundException {
         int[] output = {0,0};
 
         String[] keys = super.getKeys(filePath);
@@ -215,22 +216,21 @@ public class HashTableN2 extends PerfectHashing {
 
 
 // Test
-    public static void main(String[] args){
-        PerfectHashing p = new HashTableN2();
+    public static void main(String[] args) {
+
+
+        PerfectHashing p;
 
         p = new HashTableN2();
-        p = new HashTableN();
 
-//        String[] str = {"aaa", "bbb", "aba", "case", "aaa", "baa","dfdfgd", "fsgeefds", "vdfvsdfv", "rgeged", "fdsdvd"};
 
-        HashTableN2 h1 = new HashTableN2(4);
+        p.insert("aaa");
+        p.delete("add");
+        p.search("cds");
+//        p.batchInsert("/home/mohamed/Desktop/test1");
+//        p.batchDelete("/home/mohamed/Desktop/test1");
 
-        System.out.println(Arrays.toString(h1.batchDelete("/home/mohamed/Desktop/test1")));
-        System.out.println(Arrays.toString(h1.batchInsert("/home/mohamed/Desktop/test1")));
-        System.out.println(Arrays.toString(h1.table));
-        System.out.println(h1.table.length);
-        System.out.println(h1.size);
-        System.out.println(Arrays.toString(h1.batchDelete("/home/mohamed/Desktop/test1")));
+
 
 
 

@@ -9,9 +9,9 @@ public class DictionaryImplementation {
 
     public DictionaryImplementation(String typeD) {
         if (typeD.equals("O(n)")) {
-            dictionary = new HashMap<>();
+            dictionary = (Map<String, Integer>) new HashTableN();
         } else if (typeD.equals("O(n^2)")) {
-            dictionary = new HashMap<>();
+            dictionary = (Map<String, Integer>) new HashTableN2();
         } else {
             throw new IllegalArgumentException("Invalid dictionary type.");
         }

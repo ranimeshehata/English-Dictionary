@@ -8,16 +8,19 @@ public class HashTableN extends  PerfectHashing{
      */
     private class bucket {
         Random rand = new Random();
+        private int MAX_DEPTH= 10;
         String[] vals;
         int [][] hash;
         int size;
         int count;
+        int mod;
     
-        public bucket(int size){
+        public bucket(){
             this.count = 0;
-            this.vals = new String[size];
-            this.size = size;
+            this.vals = new String[2];
+            this.size = 2;
             this.setHash();
+            this.mod=1;
         }
         private void setHash() {
             int rows = (int) Math.ceil(Math.log(size*size) / Math.log(2));
@@ -32,26 +35,30 @@ public class HashTableN extends  PerfectHashing{
         }
     
     
-        int insert(String key){
+        int insert(String key,int depth){
+            if (depth > MAX_DEPTH) {
+                return -1; // or throw an exception or handle overflow case
+            }
             int []x=HashTableN.super.convertToASCII(key);
-            int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.size;
+            int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.mod;
             if(key.equals(this.vals[index])){
                 return 2;
             }
             else if(this.vals[index]!=null){
                 rehash();
-                insert(key);
+                insert(key,depth+1);
                 return 1;
             }
             else{
-                count++;
                 this.vals[index]=key;
+                count++;
+                mod=count;
                 return 0; 
             }
         }
         int delete(String key){
             int []x=HashTableN.super.convertToASCII(key);
-            int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.size;
+            int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.mod;
             if(key.equalsIgnoreCase(this.vals[index])){
                 this.vals[index]=null;
                 return 0;
@@ -62,7 +69,7 @@ public class HashTableN extends  PerfectHashing{
         }
         int search(String key){
             int []x=HashTableN.super.convertToASCII(key);
-            int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.size;
+            int index=HashTableN.super.getIndex(HashTableN.super.hashing(this.hash,x))%this.mod;
             if(key.equalsIgnoreCase(this.vals[index])){
                 return 0;
             }
@@ -72,12 +79,12 @@ public class HashTableN extends  PerfectHashing{
         }
         int rehash(){
             String[]items=this.vals;
-            this.vals=new String[this.size*this.size];
-            this.size=0;
+            this.vals=new String[count*count];
+            this.count=0;
             this.setHash();
             for(String s:items){
                 if(s!=null){
-                    if(this.insert(s)==1){
+                    if(this.insert(s,0)==1){
                         return 1;
                     }
                 }
@@ -86,16 +93,16 @@ public class HashTableN extends  PerfectHashing{
         }
         int rehash(int newSize){
             String[]items=this.vals;
-            if(newSize<this.size*this.size){
+            if(newSize<this.count*this.count){
                 return -1;
             }
             this.size=newSize;
-            this.vals=new String[this.size*this.size];
+            this.vals=new String[this.count*this.count];
             this.count=0;
             this.setHash();
             for(String s:items){
                 if(s!=null){
-                    if(this.insert(s)==1){
+                    if(this.insert(s,0)==1){
                         return 1;
                     }
                 }
@@ -111,7 +118,12 @@ public class HashTableN extends  PerfectHashing{
     Random rand = new Random();
     
     public HashTableN(){
-      this(10);
+        this.table=new bucket[1000];
+        this.capacity=1000;
+        this.count=0;
+        for(int i=0;i<capacity;i++){
+            this.table[i]=new bucket();
+        }
         this.setHash();
     }    
     public HashTableN(int size){
@@ -119,7 +131,7 @@ public class HashTableN extends  PerfectHashing{
         this.capacity=size;
         this.count=0;
         for(int i=0;i<size;i++){
-            this.table[i]=new bucket(size);
+            this.table[i]=new bucket();
         }
         this.setHash();
     }    
@@ -180,13 +192,13 @@ public class HashTableN extends  PerfectHashing{
         int []x=super.convertToASCII(key);
         int index=super.getIndex(super.hashing(this.hash,x))%this.capacity;
         if(this.table[index]!=null){
-            if(this.table[index].insert(key)==2){
+            if(this.table[index].insert(key,0)==2){
                 return 2;
             }
         }
         else{
-            this.table[index]=new bucket(this.capacity);
-            if(this.table[index].insert(key)==1){
+            this.table[index]=new bucket();
+            if(this.table[index].insert(key,0)==1){
                 return 1;
             }
         }
@@ -278,32 +290,34 @@ public class HashTableN extends  PerfectHashing{
     }
 
 
-//        public static void main(String[] args){
-//        String[] str = {"aaa", "bbb", "aba", "case", "aaa", "baa"};
+       public static void main(String[] args){
+       String[] str = {"aaa", "bbb", "aba", "case", "aaa", "baa"};
+        PerfectHashing h1 = new HashTableN();
+        PerfectHashing h2 = new HashTableN(str.length);
+        
+        System.out.println("Insertion:");
+        for(String s: str){
+            System.out.println(s);
+            System.out.println(h1.insert(s));
+            System.out.println(h2.insert(s));
+        }
+       str = new String[]{"aaa", "bbb", "case", "baa","966461"};
 
-//        PerfectHashing h1 = new HashTableN();
-//        PerfectHashing h2 = new HashTableN(6);
+       System.out.println("Search:");
+       for(String s: str){
+           System.out.println(s);
+           System.out.println(h1.search(s));
+           System.out.println(h2.search(s));
+       }
 
-//        System.out.println("Insertion:");
-//       System.out.println(Arrays.toString(h1.batchInsert("D:\\college\\semster6\\DS\\labs\\lab2\\English-Dictionary\\src\\demo_ass2_test.txt")));
+       System.out.println("Deletion:");
+       for(String s: str){
+           System.out.println(s);
+           System.out.println(h1.delete(s));
+           System.out.println(h2.delete(s));
+       }
 
-//        str = new String[]{"aaa", "bbb", "case", "baa"};
-
-//        System.out.println("Search:");
-//        for(String s: str){
-//            System.out.println(s);
-//            System.out.println(h1.search(s));
-//            System.out.println(h2.search(s));
-//        }
-
-//        System.out.println("Deletion:");
-//        for(String s: str){
-//            System.out.println(s);
-//            System.out.println(h1.delete(s));
-//            System.out.println(h2.delete(s));
-//        }
-
-//    }
+   }
 
 
 }

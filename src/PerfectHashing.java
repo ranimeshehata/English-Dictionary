@@ -4,7 +4,7 @@ import java.util.List;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public abstract class PerfectHashing {
+public abstract class PerfectHashing{
 
 
     public String[] getKeys(String filepath){
@@ -52,7 +52,7 @@ public abstract class PerfectHashing {
     protected int getIndex(int[] bin){
         int index = 0;
         for (int i = 0; i <bin.length; i++) {
-         index += (int) (bin[i] * (Math.pow(2,i)));
+            index += (int) (bin[i] * (Math.pow(2,i)));
         }
         return index;
     }
@@ -63,7 +63,7 @@ public abstract class PerfectHashing {
         for(int r = 0; r < h.length; r++){
             hx[r] = 0;
             for(int i = 0; i < x.length; i++)
-                    hx[r] ^= h[r][i] * x[i];
+                hx[r] ^= h[r][i] * x[i];
         }
         return  hx;
     }
@@ -82,8 +82,8 @@ public abstract class PerfectHashing {
      * */
     abstract public int rehash(int newSize);
     /**
-    * @return 0 if successfully completed and 1 otherwise
-    * */
+     * @return 0 if successfully completed and 1 otherwise
+     * */
     abstract public  int insert (String key);
 
     /**

@@ -8,9 +8,9 @@ A probability distribution H over hash functions from U to {1, ..., M} is univer
 ## 2.1)	Thereom 1
 If H is universal, then for any set S ⊂ U, for any x ∈ U (that we might want to insert or lookup), for a random h taken from H, the expected number of collisions between x and other elements in S is at most N/M.
 ## 2.2)	Constructing a Universal Hash Family: The Matrix Method
-Let’s say keys are u-bits long. Say the table size M is power of 2, so an index is b-bits long with M = 2^b. What we’ll do is pick h to be a random b-by-u 0/1 matrix, and define h(x)=hx, where we do addition mod 2. For instance:
+Let’s say keys are u-bits long. Say the table size M is power of 2, so an index is b-bits long with M = 2^b. What we’ll do is pick h to be a random b-by-u 0/1 matrix, and define h(x)=hx, where we do addition mod 2. For instance:<br>
 ![image](https://github.com/ranimeshehata/English-Dictionary/assets/121239735/f1384d80-b597-4632-b693-48b694c69cdc)
-
+<br>
 We can show that for x = y, Pr[h(x) = h(y)] = 1/M = 1/(2^b)
 ## 3)	O(N^2) - Space Solution
 Say we are willing to have a table whose size is quadratic in the size N of our dictionary S. Then, here is an easy method. Let H be universal and M = N^2. Pick a random h from H and try it out, hashing everything in S. So, we just try it, and if we got any collisions, we just try a new h. On average, we will only need to do this twice.

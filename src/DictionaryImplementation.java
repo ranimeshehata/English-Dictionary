@@ -1,8 +1,4 @@
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
-import java.util.HashMap;
-import java.util.Map;
 
 public class DictionaryImplementation {
     private PerfectHashing dictionary ;
@@ -30,12 +26,13 @@ public class DictionaryImplementation {
         }
     }
 
-    public void search(String toSearch) {
+    public boolean search(String toSearch) {
         if (dictionary.search(toSearch) == 0) {
             System.out.println("\u001B[32m Found in dictionary ✅\u001B[0m");
         } else {
             System.out.println("\u001B[31m Not found in dictionary ❌\u001B[0m");
         }
+        return false;
     }
 
     public void batchInsert(String fileToInsert) {

@@ -71,7 +71,19 @@ public class HashTableN2 extends PerfectHashing {
 
     @Override
     public int rehash() {
-        String[] tempTable = this.table;
+        String[] tempTable;
+        if(this.table.length >= 1000000){
+            tempTable = new String[this.size];
+            for (int i = 0, j=0; i < this.table.length; i++) {
+                if (this.table[i] != null) {
+                    tempTable[j] = this.table[i];
+                    j++;
+                }
+            }
+
+        }else{
+            tempTable = this.table;
+        }
         int tempSize = this.size;
 
         if(this.size < 2) this.size = 2;
@@ -105,28 +117,41 @@ public class HashTableN2 extends PerfectHashing {
     @Override
     public int rehash(int newSize) {
 
-        String[] tempTable = this.table;
+        String[] tempTable;
+        if(this.table.length >= 1000000){
+            tempTable = new String[this.size];
+            for (int i = 0, j=0; i < this.table.length; i++) {
+                if (this.table[i] != null) {
+                   tempTable[j] = this.table[i];
+                   j++;
+                }
+            }
+
+        }else{
+            tempTable = this.table;
+        }
+
         int tempSize = this.size;
 
         if (newSize < 2 || newSize < (this.size*this.size)) return -1;
 
         do {
             rehashing = true;
-        this.size = newSize;
-        this.table = new String[size * size];
-        this.setHash();
-        this.size = 0;
+            this.size = newSize;
+            this.table = new String[size * size];
+            this.setHash();
+            this.size = 0;
 
-        for (String s : tempTable) {
-            if (s != null) {
-                if(this.insert(s) == 1) {
-                    rehashing = false;
-                    this.size = tempSize;
-                    this.table = tempTable;
-                    break;
+            for (String s : tempTable) {
+                if (s != null) {
+                    if(this.insert(s) == 1) {
+                        rehashing = false;
+                        this.size = tempSize;
+                        this.table = tempTable;
+                        break;
+                    }
                 }
             }
-        }
         }while (!rehashing);
 
         rehashing = false;
@@ -177,9 +202,9 @@ public class HashTableN2 extends PerfectHashing {
 
         String[] keys = super.getKeys(filePath);
 
-        this.size += keys.length;
+//        this.size += keys.length;
 
-        this.rehash();
+        this.rehash(this.size + keys.length);
 
         for (String key : keys) {
             int res = this.insert(key);
@@ -224,10 +249,18 @@ public class HashTableN2 extends PerfectHashing {
         p = new HashTableN2();
 
 
-        p.insert("aaa");
-        p.delete("add");
-        p.search("cds");
-//        p.batchInsert("/home/mohamed/Desktop/test1");
+//        p.insert("aaa");
+//        p.delete("add");
+//        p.search("cds");
+        try {
+            for (int i = 0; i < 1; i++) {
+                System.out.println(Arrays.toString(p.batchInsert("/home/mohamed/Desktop/test2.txt")));
+                System.out.println(Arrays.toString(p.batchDelete("/home/mohamed/Desktop/test2.txt")));
+                System.out.println(Arrays.toString(p.batchDelete("/home/mohamed/Desktop/test2.txt")));
+            }
+        } catch (FileNotFoundException e) {
+            throw new RuntimeException(e);
+        }
 //        p.batchDelete("/home/mohamed/Desktop/test1");
 
 

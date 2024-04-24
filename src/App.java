@@ -2,14 +2,12 @@ import java.util.InputMismatchException;
 import java.util.Scanner;
 
 public class App {
-
-    // this method starts program
     public void start() {
         Scanner scanner = new Scanner(System.in);
         System.out.println("\u001B[40mEnter a number corresponding to the type of the backend tree of the dictionary: " + "\u001B[0m");
         System.out.print("\u001B[33m1)'O(n)'\n2)'O(n^2)'\u001B[0m\nAnswer >> ");
         String typeD;
-       PerfectHashing d;
+        DictionaryImplementation d;
         typeD = scanner.next();
         while (true) {
             try {
@@ -30,10 +28,10 @@ public class App {
             }
         }
         //String backendType = scanner.nextLine();
-
-        operations();
+        d = new DictionaryImplementation(typeD);
+        operations(d);
     }
-    private static void operations() {
+    private static void operations(DictionaryImplementation d) {
         while (true) {
             System.out.println("-------------------------------------------------------------" + "\n\u001B[40mDictionary Menu: \u001B[0m");
             System.out.println("\u001B[33m1) Insert a string\u001B[0m");
@@ -49,36 +47,39 @@ public class App {
                 //Bounded options
                 if (operationNum < 0 || operationNum > 7) {
                     System.out.print("\u001B[31mError!! Please enter a valid option\n\u001B[0m");
-                    operations();
+                    operations(d);
                 }
                 //INSERT WORD
                 else if (operationNum == 1) {
                     System.out.print("Enter the string to insert >> ");
                     String toInsert = scanner.next();
-                    //function call
+                    d.insert(toInsert);
                 }
                 //DELETE WORD
                 else if (operationNum == 2) {
                     System.out.print("Enter the string to delete >> ");
                     String toDelete = scanner.next();
-                    //function call
+                    d.delete(toDelete);
                 }
                 //SEARCH
                 else if (operationNum == 3) {
                     System.out.print("Enter the string to search >> ");
                     String toSearch = scanner.next();
+                    d.search(toSearch);
                     //function call
                 }
                 //BATCH INSERT
                 else if (operationNum == 4) {
                     System.out.print("Enter the path of the file to insert >> ");
                     String fileToInsert = scanner.next();
+                    d.batchInsert(fileToInsert);
                     //function call
                 }
                 //BATCH DELETE
                 else if (operationNum == 5) {
                     System.out.print("Enter the path of the file to delete >> ");
                     String fileToDelete = scanner.next();
+                    d.batchDelete(fileToDelete);
                     //function call
                 }
                 //EXIT

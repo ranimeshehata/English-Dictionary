@@ -19,7 +19,7 @@ public class DictionaryImplementation {
 
     public synchronized void insert(String toInsert) {
         dictionary.insert(toInsert);
-        System.out.println("(" + toInsert + ")" + "\u001B[32m Successfully inserted ✅\u001B[0m");
+        System.out.println("(" + toInsert + ")" + "\u001B[32m Successfully INSERTED ✅\u001B[0m");
     }
 
     public synchronized void delete(String toDelete) {
@@ -39,8 +39,14 @@ public class DictionaryImplementation {
     }
 
     public void batchInsert(String fileToInsert) {
-        try{
-            dictionary.batchInsert(fileToInsert);
+        try {
+            int[] result = dictionary.batchInsert(fileToInsert);
+            int insertedCount = result[0];
+            int failedCount = result[1];
+            System.out.println("Inserted successfully: " + insertedCount + " strings.");
+            if (failedCount != 0) {
+                System.out.println("Failed to insert: " + failedCount + " strings.");
+            }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
@@ -48,10 +54,15 @@ public class DictionaryImplementation {
 
     public void batchDelete(String fileToDelete) {
         try {
-            dictionary.batchDelete(fileToDelete);
+            int[] result = dictionary.batchDelete(fileToDelete);
+            int deletedCount = result[0];
+            int failedCount = result[1];
+            System.out.println("Deleted successfully: " + deletedCount + " strings.");
+            if (failedCount != 0) {
+                System.out.println("Failed to delete: " + failedCount + " strings.");
+            }
         } catch (IOException e) {
             System.err.println("Error reading file: " + e.getMessage());
         }
     }
-
 }
